@@ -1,11 +1,347 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>lwq网站</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lwq 的个人网站</title>
+    <style>
+        /* ===== 基础样式 ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            transition: background 0.5s ease;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* ===== 卡片样式 ===== */
+        .card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 20px 0;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            transform: translateY(0);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* ===== 按钮样式 ===== */
+        .btn {
+            display: inline-block;
+            padding: 12px 28px;
+            margin: 8px 5px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(102,126,234,0.4);
+        }
+
+        .btn-secondary {
+            background: #fff;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        /* ===== 输入框 ===== */
+        .input-group {
+            margin: 20px 0;
+        }
+
+        input[type="text"] {
+            padding: 12px 20px;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            font-size: 16px;
+            width: 60%;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            border-color: #667eea;
+        }
+
+        /* ===== 隐藏内容区域 ===== */
+        .hidden-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+            margin-top: 10px;
+        }
+
+        .hidden-content.show {
+            max-height: 500px;
+        }
+
+        /* ===== 计数器 ===== */
+        .counter-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+            font-size: 24px;
+        }
+
+        .counter-box span {
+            font-size: 48px;
+            font-weight: bold;
+            color: #667eea;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        /* ===== 访客留言板 ===== */
+        .message-board {
+            margin-top: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .message-item {
+            background: #f5f5f5;
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin: 8px 0;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* ===== 时间显示 ===== */
+        .clock {
+            font-size: 18px;
+            color: #666;
+            margin: 10px 0;
+        }
+
+        /* ===== 响应式（手机适配） ===== */
+        @media (max-width: 600px) {
+            h1 { font-size: 1.8em; }
+            .card { padding: 25px; }
+            input[type="text"] { width: 100%; }
+        }
+    </style>
 </head>
 <body>
-    <h1>你好，欢迎访问我的网站！</h1>
-    <p>网站搭建成功了 🎉</p>
+
+<div class="container">
+
+    <!-- 欢迎卡片 -->
+    <div class="card">
+        <h1>你好，我是 lwq 👋</h1>
+        <p class="clock" id="clock">正在加载时间...</p>
+        <p>这是我的第一个个人网站，下面有一些互动功能，试试看！</p>
+    </div>
+
+    <!-- 交互卡片 1：点击问候 -->
+    <div class="card">
+        <h2>🎯 点击互动</h2>
+        <p>点下面的按钮，会有不同的反应：</p>
+        <button class="btn btn-primary" onclick="sayHello()">👋 跟我打招呼</button>
+        <button class="btn btn-secondary" onclick="changeColor()">🎨 切换背景色</button>
+        <button class="btn btn-primary" onclick="showSecret()">🔮 显示秘密</button>
+        <div id="greeting" style="margin-top:15px; font-size:18px; color:#667eea;"></div>
+    </div>
+
+    <!-- 交互卡片 2：计数器 -->
+    <div class="card">
+        <h2>🔢 计数器</h2>
+        <p>练习 JavaScript 变量和点击事件：</p>
+        <div class="counter-box">
+            <button class="btn btn-secondary" onclick="changeCount(-1)">➖</button>
+            <span id="count">0</span>
+            <button class="btn btn-secondary" onclick="changeCount(1)">➕</button>
+        </div>
+        <button class="btn btn-primary" onclick="resetCount()">🔄 重置</button>
+    </div>
+
+    <!-- 交互卡片 3：输入互动 -->
+    <div class="card">
+        <h2>✏️ 输入你的名字</h2>
+        <div class="input-group">
+            <input type="text" id="nameInput" placeholder="输入你的名字..." onkeypress="handleEnter(event)">
+            <button class="btn btn-primary" onclick="greetByName()">确认</button>
+        </div>
+        <p id="nameResult" style="margin-top:10px; color:#667eea; font-size:18px;"></p>
+    </div>
+
+    <!-- 交互卡片 4：展开/收起 -->
+    <div class="card">
+        <h2>📖 关于我</h2>
+        <p>点击按钮查看更多信息：</p>
+        <button class="btn btn-secondary" onclick="toggleAbout()" id="aboutBtn">👇 展开</button>
+        <div class="hidden-content" id="aboutContent">
+            <p style="margin-top:15px; line-height:1.8;">
+                我正在学习前端开发！<br>
+                这个网站是用 HTML + CSS + JavaScript 写的。<br>
+                托管在 GitHub Pages 上，完全免费。<br>
+                接下来我想学习更多动画效果和响应式布局。
+            </p>
+        </div>
+    </div>
+
+    <!-- 交互卡片 5：留言板（仅前端，刷新会消失） -->
+    <div class="card">
+        <h2>💬 访客留言</h2>
+        <p>留下一句话（注意：刷新页面会消失，这是纯前端演示）：</p>
+        <div class="input-group">
+            <input type="text" id="msgInput" placeholder="说点什么..." onkeypress="handleMsgEnter(event)">
+            <button class="btn btn-primary" onclick="addMessage()">发送</button>
+        </div>
+        <div class="message-board" id="messageBoard"></div>
+    </div>
+
+</div>
+
+<script>
+    // ===== 1. 实时时钟 =====
+    function updateClock() {
+        const now = new Date();
+        const timeStr = now.toLocaleString('zh-CN', {
+            year: 'numeric', month: '2-digit', day: '2-digit',
+            hour: '2-digit', minute: '2-digit', second: '2-digit'
+        });
+        document.getElementById('clock').textContent = '🕐 ' + timeStr;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // ===== 2. 打招呼 =====
+    function sayHello() {
+        const greetings = [
+            '你好！很高兴见到你 🎉',
+            '欢迎来到我的网站！✨',
+            '今天也要加油哦 💪',
+            '感谢你的访问！🙏',
+            'Hello World! 🌍'
+        ];
+        const random = greetings[Math.floor(Math.random() * greetings.length)];
+        const el = document.getElementById('greeting');
+        el.textContent = random;
+        el.style.animation = 'none';
+        setTimeout(() => el.style.animation = 'slideIn 0.5s ease', 10);
+    }
+
+    // ===== 3. 切换背景色 =====
+    let colorIndex = 0;
+    const colors = [
+        'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+        'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+        'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+        'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+        'linear-gradient(135deg, #30cfd0 0%, #330867 100%)'
+    ];
+    function changeColor() {
+        colorIndex = (colorIndex + 1) % colors.length;
+        document.body.style.background = colors[colorIndex];
+    }
+
+    // ===== 4. 显示秘密 =====
+    function showSecret() {
+        alert('🎁 秘密：你是一个很棒的学习者！继续加油！');
+    }
+
+    // ===== 5. 计数器 =====
+    let count = 0;
+    function changeCount(n) {
+        count += n;
+        document.getElementById('count').textContent = count;
+    }
+    function resetCount() {
+        count = 0;
+        document.getElementById('count').textContent = 0;
+    }
+
+    // ===== 6. 名字问候 =====
+    function greetByName() {
+        const name = document.getElementById('nameInput').value.trim();
+        if (name) {
+            document.getElementById('nameResult').textContent = `你好，${name}！很高兴认识你 😊`;
+        } else {
+            document.getElementById('nameResult').textContent = '请先输入名字哦～';
+        }
+    }
+    function handleEnter(e) {
+        if (e.key === 'Enter') greetByName();
+    }
+
+    // ===== 7. 展开/收起 =====
+    let aboutOpen = false;
+    function toggleAbout() {
+        aboutOpen = !aboutOpen;
+        const content = document.getElementById('aboutContent');
+        const btn = document.getElementById('aboutBtn');
+        if (aboutOpen) {
+            content.classList.add('show');
+            btn.textContent = '👆 收起';
+        } else {
+            content.classList.remove('show');
+            btn.textContent = '👇 展开';
+        }
+    }
+
+    // ===== 8. 留言板 =====
+    function addMessage() {
+        const input = document.getElementById('msgInput');
+        const text = input.value.trim();
+        if (!text) return;
+        
+        const board = document.getElementById('messageBoard');
+        const item = document.createElement('div');
+        item.className = 'message-item';
+        const time = new Date().toLocaleTimeString('zh-CN');
+        item.textContent = `[${time}] ${text}`;
+        board.insertBefore(item, board.firstChild);
+        input.value = '';
+    }
+    function handleMsgEnter(e) {
+        if (e.key === 'Enter') addMessage();
+    }
+</script>
+
 </body>
 </html>
+
